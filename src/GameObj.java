@@ -58,7 +58,10 @@ public class GameObj {
 
 	}
 
-
+	// Empty constructor to allow for flexible subclasses.
+	public GameObj(){
+	}
+	
 	/**
 	 * Moves the object by its velocity.  Ensures that the object does
 	 * not go outside its bounds by clipping.
