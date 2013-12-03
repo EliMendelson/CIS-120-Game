@@ -22,16 +22,17 @@ import java.util.ArrayList;
 public class GameCourt extends JPanel {
 
 	// the state of the game logic
-	private Square square;          // the Black Square, keyboard control
+	private Player player1;          // the Black Square, keyboard control
+	private Player player2;			 // the Blue Square, keyboard control
 	private Circle snitch;          // the Golden Snitch, bounces
-	private Poison poison;          // the Poison Mushroom, doesn't move
+	//private Poison poison;          // the Poison Mushroom, doesn't move
 	
 	public boolean playing = false;  // whether the game is running
 	private JLabel status;       // Current status text (i.e. Running...)
 
 	// Game constants
-	public static final int COURT_WIDTH = 300;
-	public static final int COURT_HEIGHT = 300;
+	public static final int COURT_WIDTH = 700;
+	public static final int COURT_HEIGHT = 500;
 	public static final int SQUARE_VELOCITY = 4;
 	// Update interval for timer in milliseconds 
 	public static final int INTERVAL = 35; 
@@ -65,17 +66,34 @@ public class GameCourt extends JPanel {
 		addKeyListener(new KeyAdapter(){
 			public void keyPressed(KeyEvent e){
 				if (e.getKeyCode() == KeyEvent.VK_LEFT)
-					square.v_x = -SQUARE_VELOCITY;
+					player1.v_x = -SQUARE_VELOCITY;
 				else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
-					square.v_x = SQUARE_VELOCITY;
+					player1.v_x = SQUARE_VELOCITY;
 				else if (e.getKeyCode() == KeyEvent.VK_DOWN)
-					square.v_y = SQUARE_VELOCITY;
+					player1.v_y = SQUARE_VELOCITY;
 				else if (e.getKeyCode() == KeyEvent.VK_UP)
-					square.v_y = -SQUARE_VELOCITY;
+					player1.v_y = -SQUARE_VELOCITY;
 			}
 			public void keyReleased(KeyEvent e){
-				square.v_x = 0;
-				square.v_y = 0;
+				player1.v_x = 0;
+				player1.v_y = 0;
+			}
+		});
+		
+		addKeyListener(new KeyAdapter(){
+			public void keyPressed(KeyEvent e){
+				if (e.getKeyCode() == KeyEvent.VK_A)
+					player2.v_x = -SQUARE_VELOCITY;
+				else if (e.getKeyCode() == KeyEvent.VK_D)
+					player2.v_x = SQUARE_VELOCITY;
+				else if (e.getKeyCode() == KeyEvent.VK_S)
+					player2.v_y = SQUARE_VELOCITY;
+				else if (e.getKeyCode() == KeyEvent.VK_W)
+					player2.v_y = -SQUARE_VELOCITY;
+			}
+			public void keyReleased(KeyEvent e){
+				player2.v_x = 0;
+				player2.v_y = 0;
 			}
 		});
 
@@ -86,8 +104,11 @@ public class GameCourt extends JPanel {
 	 */
 	public void reset() {
 
-		square = new Square(COURT_WIDTH, COURT_HEIGHT);
-		poison = new Poison(COURT_WIDTH, COURT_HEIGHT);
+		player1 = new Player(COURT_WIDTH/3, COURT_HEIGHT/2,
+								COURT_WIDTH, COURT_HEIGHT);
+		player2 = new Player((COURT_WIDTH*2)/3, COURT_HEIGHT/2,
+								COURT_WIDTH, COURT_HEIGHT);
+		//poison = new Poison(COURT_WIDTH, COURT_HEIGHT);
 		snitch = new Circle(COURT_WIDTH, COURT_HEIGHT);
 
 		playing = true;
@@ -105,22 +126,32 @@ public class GameCourt extends JPanel {
 		if (playing) {
 			// advance the square and snitch in their
 			// current direction.
-			square.move();
+			player1.move();
+			player2.move();
 			snitch.move();
 
 			// make the snitch bounce off walls...
 			snitch.bounce(snitch.hitWall());
 			// ...and the mushroom
-			snitch.bounce(snitch.hitObj(poison));
+			//snitch.bounce(snitch.hitObj(poison));
 		
 			// check for the game end conditions
-			if (square.intersects(poison)) { 
+			/*if (player1.intersects(poison)) { 
 				playing = false;
-				status.setText("You lose!");
+				status.setText("Player 1 loses!");
 
-			} else if (square.intersects(snitch)) {
+			} else*/ if (player1.intersects(snitch)) {
 				playing = false;
-				status.setText("You win!");
+				status.setText("Player 1 wins!");
+			}
+			
+			/*if (player2.intersects(poison)) { 
+				playing = false;
+				status.setText("Player 2 loses!");
+
+			} else*/ if (player2.intersects(snitch)) {
+				playing = false;
+				status.setText("Player 2 wins!");
 			}
 			
 			// update the display
@@ -131,8 +162,9 @@ public class GameCourt extends JPanel {
 	@Override 
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		square.draw(g);
-		poison.draw(g);
+		player1.draw(g, Color.RED);
+		player2.draw(g, Color.BLUE);
+		//poison.draw(g);
 		snitch.draw(g);
 	}
 

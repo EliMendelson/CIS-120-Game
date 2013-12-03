@@ -11,9 +11,9 @@ import java.awt.*;
  *
  */
 public class Square extends GameObj {
-	public static final int SIZE = 20;
-	public static final int INIT_X = 0;
-	public static final int INIT_Y = 0;
+	public static final int SIZE = 40;
+	//public static final int INIT_X = 0;
+	//public static final int INIT_Y = 0;
 	public static final int INIT_VEL_X = 0;
 	public static final int INIT_VEL_Y = 0;
 	
@@ -22,7 +22,7 @@ public class Square extends GameObj {
      * when constructing a Square, we simply use the
      * superclass constructor called with the correct parameters 
      */
-    public Square(int courtWidth, int courtHeight){
+    public Square(int INIT_X, int INIT_Y, int courtWidth, int courtHeight){
         super(INIT_VEL_X, INIT_VEL_Y, INIT_X, INIT_Y, 
         		SIZE, SIZE, courtWidth, courtHeight);
     }
