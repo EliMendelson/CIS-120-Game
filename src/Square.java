@@ -11,7 +11,7 @@ import java.awt.*;
  *
  */
 public class Square extends GameObj {
-	public static final int SIZE = 40;
+	public static final int SIZE = 20;
 	public static final int INIT_X = 0;
 	public static final int INIT_Y = 0;
 	public static final int INIT_VEL_X = 0;

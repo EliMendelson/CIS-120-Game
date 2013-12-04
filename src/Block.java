@@ -1,6 +1,12 @@
 
 public class Block extends Square{
 
+	private boolean onBoard = true;
+	
+	public boolean isOnBoard() {
+		return onBoard;
+	}
+	
 	/** Side that the block is heading toward, i.e. the direction that the block 
 	 * is going.
 	 * @param startSide
@@ -101,6 +107,13 @@ public class Block extends Square{
 		this.max_y = court_height - height;
 	}
 	
-	
+	/** Update the velocity of the object in response to hitting
+	 *  an obstacle in the given direction. If the direction is
+	 *  null, this method has no effect on the object. */
+	@Override
+	public void bounce(Direction d) {
+		if (d == null) return;
+		else onBoard = false;
+	}
 
 }

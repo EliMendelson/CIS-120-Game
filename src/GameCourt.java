@@ -21,10 +21,13 @@ import java.util.ArrayList;
 @SuppressWarnings("serial")
 public class GameCourt extends JPanel {
 
+	private boolean[] player1Controls = { false, false, false, false };
+	private boolean[] player2Controls = { false, false, false, false };
+	
 	// the state of the game logic
 	private Player player1;          // the Black Square, keyboard control
 	private Player player2;			 // the Blue Square, keyboard control
-	private Circle snitch;          // the Golden Snitch, bounces
+	//private Circle snitch;          // the Golden Snitch, bounces
 	//private Poison poison;          // the Poison Mushroom, doesn't move
 	
 	public boolean playing = false;  // whether the game is running
@@ -36,7 +39,7 @@ public class GameCourt extends JPanel {
 	public static final int SQUARE_VELOCITY = 4;
 	// Update interval for timer in milliseconds 
 	public static final int INTERVAL = 35; 
-
+	
 	public GameCourt(JLabel status){
 		// creates border around the court area, JComponent method
 		setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -54,6 +57,8 @@ public class GameCourt extends JPanel {
 		});
 		timer.start(); // MAKE SURE TO START THE TIMER!
 
+		//blockGenerator();
+		
 		// Enable keyboard focus on the court area
 		// When this component has the keyboard focus, key
 		// events will be handled by its key listener.
@@ -63,40 +68,50 @@ public class GameCourt extends JPanel {
 		// as an arrow key is pressed, by changing the square's
 		// velocity accordingly. (The tick method below actually 
 		// moves the square.)
-		addKeyListener(new KeyAdapter(){
-			public void keyPressed(KeyEvent e){
-				if (e.getKeyCode() == KeyEvent.VK_LEFT)
-					player1.v_x = -SQUARE_VELOCITY;
-				else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
-					player1.v_x = SQUARE_VELOCITY;
-				else if (e.getKeyCode() == KeyEvent.VK_DOWN)
-					player1.v_y = SQUARE_VELOCITY;
-				else if (e.getKeyCode() == KeyEvent.VK_UP)
-					player1.v_y = -SQUARE_VELOCITY;
+		addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_A) {
+					player1Controls[0] = true;
+				} else if (e.getKeyCode() == KeyEvent.VK_D) {
+					player1Controls[1] = true;
+				} else if (e.getKeyCode() == KeyEvent.VK_S) {
+					player1Controls[2] = true;
+				} else if (e.getKeyCode() == KeyEvent.VK_W) {
+					player1Controls[3] = true;
+				}
 			}
 			public void keyReleased(KeyEvent e){
-				player1.v_x = 0;
-				player1.v_y = 0;
+				int keyCode = e.getKeyCode();
+				if (keyCode == KeyEvent.VK_A || keyCode == KeyEvent.VK_D
+					|| keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_W)
+					for (int i = 0; i < player1Controls.length; i++) {
+						player1Controls[i] = false;
+					}
 			}
 		});
 		
-		addKeyListener(new KeyAdapter(){
-			public void keyPressed(KeyEvent e){
-				if (e.getKeyCode() == KeyEvent.VK_A)
-					player2.v_x = -SQUARE_VELOCITY;
-				else if (e.getKeyCode() == KeyEvent.VK_D)
-					player2.v_x = SQUARE_VELOCITY;
-				else if (e.getKeyCode() == KeyEvent.VK_S)
-					player2.v_y = SQUARE_VELOCITY;
-				else if (e.getKeyCode() == KeyEvent.VK_W)
-					player2.v_y = -SQUARE_VELOCITY;
+		addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+					player2Controls[0] = true;
+				} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+					player2Controls[1] = true;
+				} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+					player2Controls[2] = true;
+				} else if (e.getKeyCode() == KeyEvent.VK_UP) {
+					player2Controls[3] = true;
+				}
 			}
 			public void keyReleased(KeyEvent e){
-				player2.v_x = 0;
-				player2.v_y = 0;
+				int keyCode = e.getKeyCode();
+				if (keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_RIGHT
+					|| keyCode == KeyEvent.VK_DOWN || keyCode == KeyEvent.VK_UP)
+					for (int i = 0; i < player2Controls.length; i++) {
+						player2Controls[i] = false;
+					}
 			}
 		});
-
+		
 		this.status = status;
 	}
 
@@ -109,7 +124,7 @@ public class GameCourt extends JPanel {
 		player2 = new Player((COURT_WIDTH*2)/3, COURT_HEIGHT/2,
 								COURT_WIDTH, COURT_HEIGHT);
 		//poison = new Poison(COURT_WIDTH, COURT_HEIGHT);
-		snitch = new Circle(COURT_WIDTH, COURT_HEIGHT);
+		//snitch = new Circle(COURT_WIDTH, COURT_HEIGHT);
 
 		playing = true;
 		status.setText("Running...");
@@ -118,20 +133,39 @@ public class GameCourt extends JPanel {
 		requestFocusInWindow();
 	}
 
+	private void playerVelControl() {
+		if (player1Controls[0] == true) player1.v_x = -SQUARE_VELOCITY;
+		else if (player1Controls[1] == true) player1.v_x = SQUARE_VELOCITY;
+		else player1.v_x = 0;
+		if (player1Controls[2] == true) player1.v_y = SQUARE_VELOCITY;
+		else if (player1Controls[3] == true) player1.v_y = -SQUARE_VELOCITY;
+		else player1.v_y = 0;
+		
+		if (player2Controls[0] == true) player2.v_x = -SQUARE_VELOCITY;
+		else if (player2Controls[1] == true) player2.v_x = SQUARE_VELOCITY;
+		else player2.v_x = 0;
+		if (player2Controls[2] == true) player2.v_y = SQUARE_VELOCITY;
+		else if (player2Controls[3] == true) player2.v_y = -SQUARE_VELOCITY;
+		else player2.v_y = 0;
+	}
+	
     /**
      * This method is called every time the timer defined
      * in the constructor triggers.
      */
 	void tick(){
 		if (playing) {
+			
+			playerVelControl();
+			
 			// advance the square and snitch in their
 			// current direction.
 			player1.move();
 			player2.move();
-			snitch.move();
+			//snitch.move();
 
 			// make the snitch bounce off walls...
-			snitch.bounce(snitch.hitWall());
+			//snitch.bounce(snitch.hitWall());
 			// ...and the mushroom
 			//snitch.bounce(snitch.hitObj(poison));
 		
@@ -140,7 +174,7 @@ public class GameCourt extends JPanel {
 				playing = false;
 				status.setText("Player 1 loses!");
 
-			} else*/ if (player1.intersects(snitch)) {
+			} else*/ /*if (player1.intersects(snitch)) {
 				playing = false;
 				status.setText("Player 1 wins!");
 			}
@@ -149,23 +183,39 @@ public class GameCourt extends JPanel {
 				playing = false;
 				status.setText("Player 2 loses!");
 
-			} else*/ if (player2.intersects(snitch)) {
+			} else*/ /*if (player2.intersects(snitch)) {
 				playing = false;
 				status.setText("Player 2 wins!");
-			}
+			}*/
 			
 			// update the display
 			repaint();
 		} 
 	}
 
+	private void blockGenerator() {
+		while (playing){
+			Timer generate = new Timer(10000, new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					final Block block = new Block(COURT_WIDTH, COURT_HEIGHT);
+					Timer mover = new Timer(INTERVAL, new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							block.move();
+							block.bounce(block.hitWall());
+						}
+					});
+				}
+			});
+		}
+	}
+	
 	@Override 
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		player1.draw(g, Color.RED);
 		player2.draw(g, Color.BLUE);
 		//poison.draw(g);
-		snitch.draw(g);
+		//snitch.draw(g);
 	}
 
 	@Override
