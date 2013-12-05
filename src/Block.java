@@ -1,11 +1,5 @@
 
 public class Block extends Square{
-
-	private boolean onBoard = true;
-	
-	public boolean isOnBoard() {
-		return onBoard;
-	}
 	
 	/** Side that the block is heading toward, i.e. the direction that the block 
 	 * is going.
@@ -33,26 +27,26 @@ public class Block extends Square{
 					(Direction side, int courtWidth, int courtHeight) {
 		switch (side) {
 			case UP: {
-				int init_x = (int) Math.random()*courtWidth;
+				int init_x = (int) (Math.random()*courtWidth);
 				int init_y = courtHeight;
 				int[] coords = { init_x, init_y };
 				return coords;
 			}
 			case DOWN: {
-				int init_x = (int) Math.random()*courtWidth;
+				int init_x = (int) (Math.random()*courtWidth);
 				int init_y = 0;
 				int[] coords = { init_x, init_y };
 				return coords;
 			}
 			case LEFT: {
 				int init_x = courtWidth;
-				int init_y = (int) Math.random()*courtHeight;
+				int init_y = (int) (Math.random()*courtHeight);
 				int[] coords = { init_x, init_y };
 				return coords;
 			}
 			case RIGHT: {
 				int init_x = 0;
-				int init_y = (int) Math.random()*courtHeight;
+				int init_y = (int) (Math.random()*courtHeight);
 				int[] coords = { init_x, init_y };
 				return coords;
 			}
@@ -105,15 +99,6 @@ public class Block extends Square{
 		// bounds for the upper left corner of the object.
 		this.max_x = court_width - width;
 		this.max_y = court_height - height;
-	}
-	
-	/** Update the velocity of the object in response to hitting
-	 *  an obstacle in the given direction. If the direction is
-	 *  null, this method has no effect on the object. */
-	@Override
-	public void bounce(Direction d) {
-		if (d == null) return;
-		else onBoard = false;
 	}
 
 }

@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * GameCourt
@@ -21,8 +22,10 @@ import java.util.ArrayList;
 @SuppressWarnings("serial")
 public class GameCourt extends JPanel {
 
+	int time = 0;
 	private boolean[] player1Controls = { false, false, false, false };
 	private boolean[] player2Controls = { false, false, false, false };
+	private ArrayList<Block> blocks = new ArrayList<Block>();
 	
 	// the state of the game logic
 	private Player player1;          // the Black Square, keyboard control
@@ -53,12 +56,12 @@ public class GameCourt extends JPanel {
 		Timer timer = new Timer(INTERVAL, new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				tick();
+				blockGenerator();
+				time += INTERVAL;
 			}
 		});
 		timer.start(); // MAKE SURE TO START THE TIMER!
 
-		//blockGenerator();
-		
 		// Enable keyboard focus on the court area
 		// When this component has the keyboard focus, key
 		// events will be handled by its key listener.
@@ -127,6 +130,8 @@ public class GameCourt extends JPanel {
 		//snitch = new Circle(COURT_WIDTH, COURT_HEIGHT);
 
 		playing = true;
+		time = 0;
+		blocks.clear();
 		status.setText("Running...");
 
 		// Make sure that this component has the keyboard focus
@@ -164,6 +169,16 @@ public class GameCourt extends JPanel {
 			player2.move();
 			//snitch.move();
 
+			Iterator<Block> iter = blocks.iterator();
+			
+			while (iter.hasNext()) {
+				Block block = iter.next();
+				block.move();
+				if (block.hitWall() != null) {
+					iter.remove();
+				}
+			}
+			
 			// make the snitch bounce off walls...
 			//snitch.bounce(snitch.hitWall());
 			// ...and the mushroom
@@ -194,18 +209,12 @@ public class GameCourt extends JPanel {
 	}
 
 	private void blockGenerator() {
-		while (playing){
-			Timer generate = new Timer(10000, new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					final Block block = new Block(COURT_WIDTH, COURT_HEIGHT);
-					Timer mover = new Timer(INTERVAL, new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							block.move();
-							block.bounce(block.hitWall());
-						}
-					});
-				}
-			});
+		if (time % 3500 == 0) {
+			time = 0;
+			Block block1 = new Block(COURT_WIDTH, COURT_HEIGHT);
+			Block block2 = new Block(COURT_WIDTH, COURT_HEIGHT);
+			blocks.add(block1);
+			blocks.add(block2);
 		}
 	}
 	
@@ -214,6 +223,9 @@ public class GameCourt extends JPanel {
 		super.paintComponent(g);
 		player1.draw(g, Color.RED);
 		player2.draw(g, Color.BLUE);
+		for (Block block : blocks) {
+			block.draw(g);
+		}
 		//poison.draw(g);
 		//snitch.draw(g);
 	}
