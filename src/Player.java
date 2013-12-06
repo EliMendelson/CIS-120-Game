@@ -5,6 +5,7 @@ import java.awt.Graphics;
 public class Player extends Square{
 	
 	public static final int SIZE = 40;
+	private Direction activeSide = getSide((int) (Math.random()*4));
 	
 	public Player(int INIT_X, int INIT_Y, int court_width, int court_height) {
 		
@@ -21,9 +22,40 @@ public class Player extends Square{
 		this.max_y = court_height - height;
 	}
 
+	private Direction getSide(int startSide) {		
+		switch (startSide) {
+			case 0:	return Direction.UP;
+			case 1:	return Direction.DOWN;
+			case 2:	return Direction.LEFT;
+			case 3:	return Direction.RIGHT;
+			default: throw new IllegalArgumentException();
+		}
+	}
+	
+	// Method to figure out which side to light up on each player.
+	public void attachSide() {
+		activeSide = getSide((int) (Math.random()*4));
+	}
+	
 	public void draw(Graphics g, Color c) {
     	g.setColor(c);
     	g.fillRect(pos_x, pos_y, width, height);
+    	g.setColor(Color.GREEN);
+    	switch (activeSide) {
+    		case UP:
+    			g.fillRect(pos_x, pos_y, width, 4);
+    			break;
+    		case DOWN:
+    			g.fillRect(pos_x, pos_y + height - 4, width, 4);
+    			break;
+    		case LEFT:
+    			g.fillRect(pos_x, pos_y, 4, height);
+    			break;
+    		case RIGHT:
+    			g.fillRect(pos_x + width - 4, pos_y, 4, height);
+    			break;
+    		default: throw new IllegalArgumentException();
+    	}
     }
 
 }

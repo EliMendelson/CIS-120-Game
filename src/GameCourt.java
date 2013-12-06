@@ -39,7 +39,7 @@ public class GameCourt extends JPanel {
 	// Game constants
 	public static final int COURT_WIDTH = 700;
 	public static final int COURT_HEIGHT = 500;
-	public static final int SQUARE_VELOCITY = 4;
+	public static final int PLAYER_VELOCITY = 7;
 	// Update interval for timer in milliseconds 
 	public static final int INTERVAL = 35; 
 	
@@ -57,6 +57,7 @@ public class GameCourt extends JPanel {
 			public void actionPerformed(ActionEvent e){
 				tick();
 				blockGenerator();
+				changeSide();
 				time += INTERVAL;
 			}
 		});
@@ -139,18 +140,18 @@ public class GameCourt extends JPanel {
 	}
 
 	private void playerVelControl() {
-		if (player1Controls[0] == true) player1.v_x = -SQUARE_VELOCITY;
-		else if (player1Controls[1] == true) player1.v_x = SQUARE_VELOCITY;
+		if (player1Controls[0] == true) player1.v_x = -PLAYER_VELOCITY;
+		else if (player1Controls[1] == true) player1.v_x = PLAYER_VELOCITY;
 		else player1.v_x = 0;
-		if (player1Controls[2] == true) player1.v_y = SQUARE_VELOCITY;
-		else if (player1Controls[3] == true) player1.v_y = -SQUARE_VELOCITY;
+		if (player1Controls[2] == true) player1.v_y = PLAYER_VELOCITY;
+		else if (player1Controls[3] == true) player1.v_y = -PLAYER_VELOCITY;
 		else player1.v_y = 0;
 		
-		if (player2Controls[0] == true) player2.v_x = -SQUARE_VELOCITY;
-		else if (player2Controls[1] == true) player2.v_x = SQUARE_VELOCITY;
+		if (player2Controls[0] == true) player2.v_x = -PLAYER_VELOCITY;
+		else if (player2Controls[1] == true) player2.v_x = PLAYER_VELOCITY;
 		else player2.v_x = 0;
-		if (player2Controls[2] == true) player2.v_y = SQUARE_VELOCITY;
-		else if (player2Controls[3] == true) player2.v_y = -SQUARE_VELOCITY;
+		if (player2Controls[2] == true) player2.v_y = PLAYER_VELOCITY;
+		else if (player2Controls[3] == true) player2.v_y = -PLAYER_VELOCITY;
 		else player2.v_y = 0;
 	}
 	
@@ -208,13 +209,24 @@ public class GameCourt extends JPanel {
 		} 
 	}
 
-	private void blockGenerator() {
+	private void changeSide() {
 		if (time % 3500 == 0) {
 			time = 0;
+			player1.attachSide();
+			player2.attachSide();
+		}
+	}
+	
+	private void blockGenerator() {
+		if (time % 1750 == 0) {
 			Block block1 = new Block(COURT_WIDTH, COURT_HEIGHT);
 			Block block2 = new Block(COURT_WIDTH, COURT_HEIGHT);
+			Block block3 = new Block(COURT_WIDTH, COURT_HEIGHT);
+			Block block4 = new Block(COURT_WIDTH, COURT_HEIGHT);
 			blocks.add(block1);
 			blocks.add(block2);
+			blocks.add(block3);
+			blocks.add(block4);
 		}
 	}
 	
