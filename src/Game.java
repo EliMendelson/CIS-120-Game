@@ -26,11 +26,14 @@ public class Game implements Runnable {
 		  // Status panel
         final JPanel status_panel = new JPanel();
         frame.add(status_panel, BorderLayout.SOUTH);
-        final JTextArea status = new JTextArea("Running...");
+        final JLabel status = new JLabel("Running...");
+        final JLabel pointStatus=  new JLabel("Score initializing...");
         status_panel.add(status);
+        status_panel.add(pointStatus);
+        pointStatus.setVerticalAlignment(SwingConstants.BOTTOM);
 
         // Main playing area
-        final GameCourt court = new GameCourt(status);
+        final GameCourt court = new GameCourt(status, pointStatus);
         frame.add(court, BorderLayout.CENTER);
 
         // Reset button

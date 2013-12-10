@@ -71,6 +71,7 @@ public class Player extends Square{
 	
 	public void loseLife() {
 		lives--;
+		// Reset position of blocks to match up with reset of player's position
 		for (Block block : activeBlocks) {
 			block.pos_x = this.pos_x + block.xDiff;
 			block.pos_y = this.pos_y + block.yDiff;
@@ -97,7 +98,11 @@ public class Player extends Square{
 	}
 	
 	private void updateArea() {
-		area += (Block.SIZE * Block.SIZE);
+		this.area += (Block.SIZE * Block.SIZE);
+	}
+	
+	public int getPoints() {
+		return this.area;
 	}
 	
 	public void draw(Graphics g, Color c) {

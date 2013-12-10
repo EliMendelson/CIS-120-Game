@@ -34,7 +34,8 @@ public class GameCourt extends JPanel {
 	//private Poison poison;          // the Poison Mushroom, doesn't move
 	
 	public boolean playing = false;  // whether the game is running
-	private JTextArea status;       // Current status text (i.e. Running...)
+	private JLabel redStatus;       // Current status text (i.e. Running...)
+	private JLabel blueStatus;  // Current points of each player
 
 	// Game constants
 	public static final int COURT_WIDTH = 700;
@@ -43,7 +44,7 @@ public class GameCourt extends JPanel {
 	// Update interval for timer in milliseconds 
 	public static final int INTERVAL = 35; 
 	
-	public GameCourt(JTextArea status){
+	public GameCourt(JLabel redStatus, JLabel blueStatus){
 		// creates border around the court area, JComponent method
 		setBorder(BorderFactory.createLineBorder(Color.BLACK));
         
@@ -116,7 +117,8 @@ public class GameCourt extends JPanel {
 			}
 		});
 		
-		this.status = status;
+		this.redStatus = redStatus;
+		this.blueStatus = blueStatus;
 	}
 
 	/** (Re-)set the state of the game to its initial state.
@@ -133,7 +135,7 @@ public class GameCourt extends JPanel {
 		playing = true;
 		time = 0;
 		blocks.clear();
-		status.setText("Running...");
+		redStatus.setText("Running...");
 
 		// Make sure that this component has the keyboard focus
 		requestFocusInWindow();
@@ -198,15 +200,21 @@ public class GameCourt extends JPanel {
 				}
 			}
 			
-			status.setText("Red: " + player1.livesLeft() + "              " +
-					"Blue: " + player2.livesLeft());
+			redStatus.setText("Red: " + player1.livesLeft() + " lives, " +
+					player1.getPoints() + " points");
+			blueStatus.setText("              Blue: " + player2.livesLeft() +
+					" lives, " + player2.getPoints() + " points");
 			
-			if (player1.livesLeft() == 0) {
+			if (player1.livesLeft() == 0 || player2.getPoints() >=
+					(player2.SIZE*player2.SIZE + 20*Square.SIZE*Square.SIZE)) {
 				playing = false;
-				status.setText("Blue wins!");
-			} else if (player2.livesLeft() == 0) {
+				redStatus.setText("");
+				blueStatus.setText("Blue wins!");
+			} else if (player2.livesLeft() == 0 || player1.getPoints() >=
+					(player2.SIZE*player2.SIZE + 20*Square.SIZE*Square.SIZE)) {
 				playing = false;
-				status.setText("Red wins!");
+				blueStatus.setText("");
+				redStatus.setText("Red wins!");
 			}
 			
 			// make the snitch bounce off walls...
