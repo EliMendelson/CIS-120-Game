@@ -106,33 +106,33 @@ public class Player extends Square{
     	g.setColor(Color.GREEN);
     	switch (activeSide) {
     		case UP:
+    			g.fillRect(pos_x, pos_y + height - 4, width, 4);
+    			for (Block block : activeBlocks) {
+    				block.draw(g);
+    				g.fillRect(block.pos_x, block.pos_y + block.height - 4,
+    						block.width, 4);
+    			}
+    			break;
+    		case DOWN:
     			g.fillRect(pos_x, pos_y, width, 4);
     			for (Block block : activeBlocks) {
     				block.draw(g);
     				g.fillRect(block.pos_x, block.pos_y, block.width, 4);
     			}
     			break;
-    		case DOWN:
-    			g.fillRect(pos_x, pos_y + height - 4, width, 4);
-    			for (Block block : activeBlocks) {
-    				block.draw(g);
-    				g.fillRect(block.pos_x, block.pos_y + block.height - 4,
-    														block.width, 4);
-    			}
-    			break;
     		case LEFT:
-    			g.fillRect(pos_x, pos_y, 4, height);
-    			for (Block block : activeBlocks) {
-    				block.draw(g);
-    				g.fillRect(block.pos_x, block.pos_y, 4, block.height);
-    			}
-    			break;
-    		case RIGHT:
     			g.fillRect(pos_x + width - 4, pos_y, 4, height);
     			for (Block block : activeBlocks) {
     				block.draw(g);
     				g.fillRect(block.pos_x + block.width - 4, block.pos_y, 4,
-    															block.height);
+    						block.height);
+    			}
+    			break;
+    		case RIGHT:
+    			g.fillRect(pos_x, pos_y, 4, height);
+    			for (Block block : activeBlocks) {
+    				block.draw(g);
+    				g.fillRect(block.pos_x, block.pos_y, 4, block.height);
     			}
     			break;
     		default: throw new IllegalArgumentException();
