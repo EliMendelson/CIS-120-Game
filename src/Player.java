@@ -106,6 +106,14 @@ public class Player extends Square{
     	g.setColor(Color.GREEN);
     	switch (activeSide) {
     		case UP:
+    			g.fillRect(pos_x, pos_y, width, 4);
+    			for (Block block : activeBlocks) {
+    				block.draw(g);
+    				g.setColor(Color.GREEN);
+    				g.fillRect(block.pos_x, block.pos_y, block.width, 4);
+    			}
+    			break;
+    		case DOWN:
     			g.fillRect(pos_x, pos_y + height - 4, width, 4);
     			for (Block block : activeBlocks) {
     				block.draw(g);
@@ -114,15 +122,15 @@ public class Player extends Square{
     						block.width, 4);
     			}
     			break;
-    		case DOWN:
-    			g.fillRect(pos_x, pos_y, width, 4);
+    		case LEFT:
+    			g.fillRect(pos_x, pos_y, 4, height);
     			for (Block block : activeBlocks) {
     				block.draw(g);
     				g.setColor(Color.GREEN);
-    				g.fillRect(block.pos_x, block.pos_y, block.width, 4);
+    				g.fillRect(block.pos_x, block.pos_y, 4, block.height);
     			}
     			break;
-    		case LEFT:
+    		case RIGHT:
     			g.fillRect(pos_x + width - 4, pos_y, 4, height);
     			for (Block block : activeBlocks) {
     				block.draw(g);
@@ -131,16 +139,54 @@ public class Player extends Square{
     						block.height);
     			}
     			break;
-    		case RIGHT:
-    			g.fillRect(pos_x, pos_y, 4, height);
-    			for (Block block : activeBlocks) {
-    				block.draw(g);
-    				g.setColor(Color.GREEN);
-    				g.fillRect(block.pos_x, block.pos_y, 4, block.height);
-    			}
-    			break;
     		default: throw new IllegalArgumentException();
     	}
     }
 
+	/*@Override
+	public boolean willIntersect(GameObj obj) {
+		int next_x = pos_x;
+		int next_y = pos_y;
+		int next_obj_x = obj.pos_x;
+		int next_obj_y = obj.pos_y;
+		return (next_x + width >= next_obj_x
+				&& next_y + height >= next_obj_y
+				&& next_obj_x + obj.width >= next_x 
+				&& next_obj_y + obj.height >= next_y);
+	}*/
+	
+	@Override
+	public Direction hitObj(GameObj other) {
+
+		if (this.willIntersect(other)) {
+			double dx = other.pos_x + other.width /2 - (pos_x + width /2);
+			double dy = other.pos_y + other.height/2 - (pos_y + height/2);
+
+			double theta = Math.atan2(dy, dx);
+			double diagTheta = Math.atan2(height, width);
+
+			if ( -diagTheta <= theta && theta <= diagTheta ) {
+				return Direction.RIGHT;
+			} else if ( diagTheta <= theta 
+					&& theta <= Math.PI - diagTheta ) {
+				return Direction.DOWN;
+			} else if ( Math.PI - diagTheta <= theta 
+					|| theta <= diagTheta - Math.PI ) {
+				return Direction.LEFT;
+			} else {
+				return Direction.UP;
+			}
+
+		} else {
+			for (Block block : activeBlocks) {
+				Direction blockHit = block.hitObj(other);
+				if (blockHit != null) {
+					return blockHit;
+				}
+			}
+			return null;
+		}
+
+	}
+	
 }

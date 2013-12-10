@@ -34,7 +34,7 @@ public class GameCourt extends JPanel {
 	//private Poison poison;          // the Poison Mushroom, doesn't move
 	
 	public boolean playing = false;  // whether the game is running
-	private JLabel status;       // Current status text (i.e. Running...)
+	private JTextArea status;       // Current status text (i.e. Running...)
 
 	// Game constants
 	public static final int COURT_WIDTH = 700;
@@ -43,7 +43,7 @@ public class GameCourt extends JPanel {
 	// Update interval for timer in milliseconds 
 	public static final int INTERVAL = 35; 
 	
-	public GameCourt(JLabel status){
+	public GameCourt(JTextArea status){
 		// creates border around the court area, JComponent method
 		setBorder(BorderFactory.createLineBorder(Color.BLACK));
         
@@ -178,22 +178,35 @@ public class GameCourt extends JPanel {
 				if (block.hitWall() != null) {
 					iter.remove();
 				}
-				if (block.hitObj(player1) == player1.getActiveSide()) {
+				if (player1.hitObj(block) == player1.getActiveSide()) {
 					iter.remove();
 					player1.addBlock(block);
-				} else if (block.hitObj(player1) != null) {
+				} else if (player1.hitObj(block) != null) {
 					player1.pos_x = COURT_WIDTH/3;
 					player1.pos_y = COURT_HEIGHT/2;
 					player1.loseLife();
+					iter.remove();
 				}
-				if (block.hitObj(player2) == player2.getActiveSide()) {
+				if (player2.hitObj(block) == player2.getActiveSide()) {
 					iter.remove();
 					player2.addBlock(block);
-				} else if (block.hitObj(player2) != null) {
+				} else if (player2.hitObj(block) != null) {
 					player2.pos_x = (COURT_WIDTH*2)/3;
 					player2.pos_y = COURT_HEIGHT/2;
 					player2.loseLife();
+					iter.remove();
 				}
+			}
+			
+			status.setText("Red: " + player1.livesLeft() + "              " +
+					"Blue: " + player2.livesLeft());
+			
+			if (player1.livesLeft() == 0) {
+				playing = false;
+				status.setText("Blue wins!");
+			} else if (player2.livesLeft() == 0) {
+				playing = false;
+				status.setText("Red wins!");
 			}
 			
 			// make the snitch bounce off walls...

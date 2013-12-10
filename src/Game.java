@@ -26,7 +26,7 @@ public class Game implements Runnable {
 		  // Status panel
         final JPanel status_panel = new JPanel();
         frame.add(status_panel, BorderLayout.SOUTH);
-        final JLabel status = new JLabel("Running...");
+        final JTextArea status = new JTextArea("Running...");
         status_panel.add(status);
 
         // Main playing area
