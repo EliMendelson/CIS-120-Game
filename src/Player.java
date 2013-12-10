@@ -78,6 +78,10 @@ public class Player extends Square{
 		}
 	}
 	
+	public void gainLife() {
+		lives++;
+	}
+	
 	private Direction getSide(int startSide) {		
 		switch (startSide) {
 			case 0:	return Direction.UP;

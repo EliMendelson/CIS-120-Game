@@ -23,9 +23,11 @@ import java.util.Iterator;
 public class GameCourt extends JPanel {
 
 	int time = 0;
+	int timeExtraLife = 0;
 	private boolean[] player1Controls = { false, false, false, false };
 	private boolean[] player2Controls = { false, false, false, false };
 	private ArrayList<Block> blocks = new ArrayList<Block>();
+	private ArrayList<ExtraLife> extraLives = new ArrayList<ExtraLife>();
 	
 	// the state of the game logic
 	private Player player1;          // the Black Square, keyboard control
@@ -58,6 +60,7 @@ public class GameCourt extends JPanel {
 			public void actionPerformed(ActionEvent e){
 				tick();
 				blockGenerator();
+				extraLifeGenerator();
 				changeSide();
 				time += INTERVAL;
 			}
@@ -134,7 +137,9 @@ public class GameCourt extends JPanel {
 
 		playing = true;
 		time = 0;
+		timeExtraLife = 0;
 		blocks.clear();
+		blueStatus.setText("");
 		redStatus.setText("Running...");
 
 		// Make sure that this component has the keyboard focus
@@ -248,7 +253,10 @@ public class GameCourt extends JPanel {
 
 	private void changeSide() {
 		if (time % 3500 == 0) {
-			time = 0;
+			if (timeExtraLife == 1) {
+				time = 0;
+				timeExtraLife = 0;
+			}
 			player1.attachSide();
 			player2.attachSide();
 		}
@@ -267,6 +275,15 @@ public class GameCourt extends JPanel {
 		}
 	}
 	
+	private void extraLifeGenerator() {
+		if (time % 1750 == 0) {
+			ExtraLife extraLife1 = new ExtraLife(COURT_WIDTH, COURT_HEIGHT);
+			ExtraLife extraLife2 = new ExtraLife(COURT_WIDTH, COURT_HEIGHT);
+			extraLives.add(extraLife1);
+			extraLives.add(extraLife2);
+		}
+	}
+	
 	@Override 
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -274,6 +291,9 @@ public class GameCourt extends JPanel {
 		player2.draw(g, Color.BLUE);
 		for (Block block : blocks) {
 			block.draw(g);
+		}
+		for (ExtraLife extraLife : extraLives) {
+			extraLife.draw(g);
 		}
 		//poison.draw(g);
 		//snitch.draw(g);
