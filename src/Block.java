@@ -1,3 +1,6 @@
+import java.awt.Color;
+import java.awt.Graphics;
+
 
 public class Block extends Square{
 	
@@ -102,6 +105,11 @@ public class Block extends Square{
 		// bounds for the upper left corner of the object.
 		this.max_x = court_width - width;
 		this.max_y = court_height - height;
+	}
+	
+	public void draw(Graphics g, Color c) {
+		g.setColor(c);
+	    g.fillRect(pos_x, pos_y, width, height);
 	}
 	
 }
