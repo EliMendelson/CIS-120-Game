@@ -1,6 +1,9 @@
 
 public class Block extends Square{
 	
+	public int xDiff;
+	public int yDiff;
+	
 	/** Side that the block is heading toward, i.e. the direction that the block 
 	 * is going.
 	 * @param startSide

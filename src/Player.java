@@ -30,9 +30,9 @@ public class Player extends Square{
 	}
 
 	public void addBlock(Block block) {
-		//block.v_x = this.v_x;
-		//block.v_y = this.v_y;
 		updateArea();
+		block.xDiff = block.pos_x - this.pos_x;
+		block.yDiff = block.pos_y - this.pos_y;
 		activeBlocks.add(block);
 	}
 	
@@ -71,6 +71,10 @@ public class Player extends Square{
 	
 	public void loseLife() {
 		lives--;
+		for (Block block : activeBlocks) {
+			block.pos_x = this.pos_x + block.xDiff;
+			block.pos_y = this.pos_y + block.yDiff;
+		}
 	}
 	
 	private Direction getSide(int startSide) {		
