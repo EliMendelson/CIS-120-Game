@@ -140,19 +140,19 @@ public class GameCourt extends JPanel {
 	}
 
 	private void playerVelControl() {
-		if (player1Controls[0] == true) player1.v_x = -PLAYER_VELOCITY;
-		else if (player1Controls[1] == true) player1.v_x = PLAYER_VELOCITY;
-		else player1.v_x = 0;
-		if (player1Controls[2] == true) player1.v_y = PLAYER_VELOCITY;
-		else if (player1Controls[3] == true) player1.v_y = -PLAYER_VELOCITY;
-		else player1.v_y = 0;
+		if (player1Controls[0] == true) player1.updateXVelocity(-PLAYER_VELOCITY);
+		else if (player1Controls[1] == true) player1.updateXVelocity(PLAYER_VELOCITY);
+		else player1.updateXVelocity(0);
+		if (player1Controls[2] == true) player1.updateYVelocity(PLAYER_VELOCITY);
+		else if (player1Controls[3] == true) player1.updateYVelocity(-PLAYER_VELOCITY);
+		else player1.updateYVelocity(0);
 		
-		if (player2Controls[0] == true) player2.v_x = -PLAYER_VELOCITY;
-		else if (player2Controls[1] == true) player2.v_x = PLAYER_VELOCITY;
-		else player2.v_x = 0;
-		if (player2Controls[2] == true) player2.v_y = PLAYER_VELOCITY;
-		else if (player2Controls[3] == true) player2.v_y = -PLAYER_VELOCITY;
-		else player2.v_y = 0;
+		if (player2Controls[0] == true) player2.updateXVelocity(-PLAYER_VELOCITY);
+		else if (player2Controls[1] == true) player2.updateXVelocity(PLAYER_VELOCITY);
+		else player2.updateXVelocity(0);
+		if (player2Controls[2] == true) player2.updateYVelocity(PLAYER_VELOCITY);
+		else if (player2Controls[3] == true) player2.updateYVelocity(-PLAYER_VELOCITY);
+		else player2.updateYVelocity(0);
 	}
 	
     /**
@@ -177,6 +177,22 @@ public class GameCourt extends JPanel {
 				block.move();
 				if (block.hitWall() != null) {
 					iter.remove();
+				}
+				if (block.hitObj(player1) == player1.getActiveSide()) {
+					iter.remove();
+					player1.addBlock(block);
+				} else if (block.hitObj(player1) != null) {
+					player1.pos_x = COURT_WIDTH/3;
+					player1.pos_y = COURT_HEIGHT/2;
+					player1.loseLife();
+				}
+				if (block.hitObj(player2) == player2.getActiveSide()) {
+					iter.remove();
+					player2.addBlock(block);
+				} else if (block.hitObj(player2) != null) {
+					player2.pos_x = (COURT_WIDTH*2)/3;
+					player2.pos_y = COURT_HEIGHT/2;
+					player2.loseLife();
 				}
 			}
 			

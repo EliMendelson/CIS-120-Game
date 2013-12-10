@@ -100,5 +100,5 @@ public class Block extends Square{
 		this.max_x = court_width - width;
 		this.max_y = court_height - height;
 	}
-
+	
 }
