@@ -109,6 +109,7 @@ public class Player extends Square{
     			g.fillRect(pos_x, pos_y + height - 4, width, 4);
     			for (Block block : activeBlocks) {
     				block.draw(g);
+    				g.setColor(Color.GREEN);
     				g.fillRect(block.pos_x, block.pos_y + block.height - 4,
     						block.width, 4);
     			}
@@ -117,6 +118,7 @@ public class Player extends Square{
     			g.fillRect(pos_x, pos_y, width, 4);
     			for (Block block : activeBlocks) {
     				block.draw(g);
+    				g.setColor(Color.GREEN);
     				g.fillRect(block.pos_x, block.pos_y, block.width, 4);
     			}
     			break;
@@ -124,6 +126,7 @@ public class Player extends Square{
     			g.fillRect(pos_x + width - 4, pos_y, 4, height);
     			for (Block block : activeBlocks) {
     				block.draw(g);
+    				g.setColor(Color.GREEN);
     				g.fillRect(block.pos_x + block.width - 4, block.pos_y, 4,
     						block.height);
     			}
@@ -132,6 +135,7 @@ public class Player extends Square{
     			g.fillRect(pos_x, pos_y, 4, height);
     			for (Block block : activeBlocks) {
     				block.draw(g);
+    				g.setColor(Color.GREEN);
     				g.fillRect(block.pos_x, block.pos_y, 4, block.height);
     			}
     			break;
