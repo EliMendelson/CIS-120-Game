@@ -139,6 +139,7 @@ public class GameCourt extends JPanel {
 		time = 0;
 		timeExtraLife = 0;
 		blocks.clear();
+		extraLives.clear();
 		blueStatus.setText("");
 		redStatus.setText("Running...");
 
@@ -177,31 +178,47 @@ public class GameCourt extends JPanel {
 			player2.move();
 			//snitch.move();
 
-			Iterator<Block> iter = blocks.iterator();
+			Iterator<Block> iterBlock = blocks.iterator();
 			
-			while (iter.hasNext()) {
-				Block block = iter.next();
+			while (iterBlock.hasNext()) {
+				Block block = iterBlock.next();
 				block.move();
 				if (block.hitWall() != null) {
-					iter.remove();
+					iterBlock.remove();
 				}
 				if (player1.hitObj(block) == player1.getActiveSide()) {
-					iter.remove();
+					iterBlock.remove();
 					player1.addBlock(block);
 				} else if (player1.hitObj(block) != null) {
 					player1.pos_x = COURT_WIDTH/3;
 					player1.pos_y = COURT_HEIGHT/2;
 					player1.loseLife();
-					iter.remove();
+					iterBlock.remove();
 				}
 				if (player2.hitObj(block) == player2.getActiveSide()) {
-					iter.remove();
+					iterBlock.remove();
 					player2.addBlock(block);
 				} else if (player2.hitObj(block) != null) {
 					player2.pos_x = (COURT_WIDTH*2)/3;
 					player2.pos_y = COURT_HEIGHT/2;
 					player2.loseLife();
-					iter.remove();
+					iterBlock.remove();
+				}
+			}
+			
+			Iterator<ExtraLife> iterExtraLife = extraLives.iterator();
+			
+			while (iterExtraLife.hasNext()) {
+				ExtraLife el = iterExtraLife.next();
+				el.move();
+				if (el.hitWall() != null) {
+					iterExtraLife.remove();
+				}
+				if (player1.hitObj(el) != null) {
+					iterExtraLife.remove();
+				}
+				if (player2.hitObj(el) != null) {
+					iterExtraLife.remove();
 				}
 			}
 			

@@ -78,7 +78,7 @@ public class Player extends Square{
 		}
 	}
 	
-	public void gainLife() {
+	private void gainLife() {
 		lives++;
 	}
 	
@@ -176,6 +176,11 @@ public class Player extends Square{
 	public Direction hitObj(GameObj other) {
 
 		if (this.willIntersect(other)) {
+			
+			if (other instanceof ExtraLife) {
+				this.gainLife();
+			}
+			
 			double dx = other.pos_x + other.width /2 - (pos_x + width /2);
 			double dy = other.pos_y + other.height/2 - (pos_y + height/2);
 
@@ -198,6 +203,9 @@ public class Player extends Square{
 			for (Block block : activeBlocks) {
 				Direction blockHit = block.hitObj(other);
 				if (blockHit != null) {
+					if (other instanceof ExtraLife) {
+						this.gainLife();
+					}
 					return blockHit;
 				}
 			}

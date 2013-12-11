@@ -23,6 +23,11 @@ public class Circle extends GameObj {
 				SIZE, SIZE, courtWidth, courtHeight);
 	}
 
+	// Empty constructor to allow for flexible subclasses.
+    public Circle(){
+    	super();
+    }
+	
 	@Override
 	public void draw(Graphics g) {
 		g.setColor(Color.YELLOW);
