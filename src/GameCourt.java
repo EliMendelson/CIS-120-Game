@@ -6,6 +6,10 @@
 
 import java.awt.*;
 import java.awt.event.*;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -189,6 +193,7 @@ public class GameCourt extends JPanel {
 				if (player1.hitObj(block) == player1.getActiveSide()) {
 					iterBlock.remove();
 					player1.addBlock(block);
+					playSound("chomp");
 				} else if (player1.hitObj(block) != null) {
 					player1.pos_x = COURT_WIDTH/3;
 					player1.pos_y = COURT_HEIGHT/2;
@@ -198,6 +203,7 @@ public class GameCourt extends JPanel {
 				if (player2.hitObj(block) == player2.getActiveSide()) {
 					iterBlock.remove();
 					player2.addBlock(block);
+					playSound("chomp");
 				} else if (player2.hitObj(block) != null) {
 					player2.pos_x = (COURT_WIDTH*2)/3;
 					player2.pos_y = COURT_HEIGHT/2;
@@ -316,6 +322,24 @@ public class GameCourt extends JPanel {
 		//snitch.draw(g);
 	}
 
+	public static synchronized void playSound(final String url) {
+		  new Thread(new Runnable() {
+		  // The wrapper thread is unnecessary, unless it blocks on the
+		  // Clip finishing; see comments.
+		    public void run() {
+		      try {
+		        Clip clip = AudioSystem.getClip();
+		        AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+		          Thread.class.getResourceAsStream(url));
+		        clip.open(inputStream);
+		        clip.start(); 
+		      } catch (Exception e) {
+		        System.err.println(e.getMessage());
+		      }
+		    }
+		  }).start();
+		}
+	
 	@Override
 	public Dimension getPreferredSize(){
 		return new Dimension(COURT_WIDTH,COURT_HEIGHT);
