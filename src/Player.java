@@ -160,7 +160,7 @@ public class Player extends Square{
     	}
     }
 
-	/*@Override
+	@Override
 	public boolean willIntersect(GameObj obj) {
 		int next_x = pos_x;
 		int next_y = pos_y;
@@ -170,7 +170,7 @@ public class Player extends Square{
 				&& next_y + height >= next_obj_y
 				&& next_obj_x + obj.width >= next_x 
 				&& next_obj_y + obj.height >= next_y);
-	}*/
+	}
 	
 	@Override
 	public Direction hitObj(GameObj other) {
