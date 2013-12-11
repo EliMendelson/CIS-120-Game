@@ -193,17 +193,16 @@ public class GameCourt extends JPanel {
 				if (player1.hitObj(block) == player1.getActiveSide()) {
 					iterBlock.remove();
 					player1.addBlock(block);
-					playSound("chomp");
+					//playSound("chomp");
 				} else if (player1.hitObj(block) != null) {
 					player1.pos_x = COURT_WIDTH/3;
 					player1.pos_y = COURT_HEIGHT/2;
 					player1.loseLife();
 					iterBlock.remove();
-				}
-				if (player2.hitObj(block) == player2.getActiveSide()) {
+				} else if (player2.hitObj(block) == player2.getActiveSide()) {
 					iterBlock.remove();
 					player2.addBlock(block);
-					playSound("chomp");
+					//playSound("chomp");
 				} else if (player2.hitObj(block) != null) {
 					player2.pos_x = (COURT_WIDTH*2)/3;
 					player2.pos_y = COURT_HEIGHT/2;
@@ -234,12 +233,12 @@ public class GameCourt extends JPanel {
 					" lives, " + player2.getPoints() + " points");
 			
 			if (player1.livesLeft() == 0 || player2.getPoints() >=
-					(player2.SIZE*player2.SIZE + 20*Square.SIZE*Square.SIZE)) {
+											(10*Square.SIZE*Square.SIZE)) {
 				playing = false;
 				redStatus.setText("");
 				blueStatus.setText("Blue wins!");
 			} else if (player2.livesLeft() == 0 || player1.getPoints() >=
-					(player2.SIZE*player2.SIZE + 20*Square.SIZE*Square.SIZE)) {
+											(10*Square.SIZE*Square.SIZE)) {
 				playing = false;
 				blueStatus.setText("");
 				redStatus.setText("Red wins!");
@@ -322,7 +321,7 @@ public class GameCourt extends JPanel {
 		//snitch.draw(g);
 	}
 
-	public static synchronized void playSound(final String url) {
+/*	public static synchronized void playSound(final String url) {
 		  new Thread(new Runnable() {
 		  // The wrapper thread is unnecessary, unless it blocks on the
 		  // Clip finishing; see comments.
@@ -339,6 +338,7 @@ public class GameCourt extends JPanel {
 		    }
 		  }).start();
 		}
+*/
 	
 	@Override
 	public Dimension getPreferredSize(){

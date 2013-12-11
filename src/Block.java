@@ -112,4 +112,16 @@ public class Block extends Square{
 	    g.fillRect(pos_x, pos_y, width, height);
 	}
 	
+	@Override
+	public boolean willIntersect(GameObj obj) {
+		int next_x = pos_x;
+		int next_y = pos_y;
+		int next_obj_x = obj.pos_x;
+		int next_obj_y = obj.pos_y;
+		return (next_x + width >= next_obj_x
+				&& next_y + height >= next_obj_y
+				&& next_obj_x + obj.width >= next_x 
+				&& next_obj_y + obj.height >= next_y);
+	}
+	
 }
